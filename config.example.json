@@ -1,0 +1,21 @@
+{
+    "messages": [
+        {
+            "after": 0,
+            "minimum_gap": 15,
+            "speech": "Attention please! Have a nice day!",
+            "_comment": "This will start at least 0 minutes after execution and run until the end of execution, saying 'Attention please! Have a nice day!' every 15-20 minutes"
+        },
+        {
+            "after": 60,
+            "before": 80,
+            "minimum_gap": 3,
+            "can_repeat": false,
+            "speech": [
+                "Howdy!",
+                "Hello!"
+            ],
+            "_comment": "After 60 minutes, but until 80, this will pick a random phrase from speech every 3-5 minutes, not repeating a phrase. If it runs out, it will not run again."
+        }
+    ]
+}
