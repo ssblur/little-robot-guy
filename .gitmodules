@@ -1,0 +1,3 @@
+[submodule "src/speak"]
+	path = src/speak
+	url = git@github.com:ssblur/LazySpeak.git
