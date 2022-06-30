@@ -1,8 +1,9 @@
 {
-    "messages": [
+    "tts": [
         {
             "after": 0,
             "minimum_gap": 15,
+            "chance_per_minute": 0.3,
             "speech": "Attention please! Have a nice day!",
             "_comment": "This will start at least 0 minutes after execution and run until the end of execution, saying 'Attention please! Have a nice day!' every 15-20 minutes"
         },
@@ -10,6 +11,7 @@
             "after": 60,
             "before": 80,
             "minimum_gap": 3,
+            "chance_per_minute": 1,
             "can_repeat": false,
             "speech": [
                 "Howdy!",

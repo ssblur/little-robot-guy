@@ -3,8 +3,8 @@
     Author: Patrick Emery
     Contact: info@pemery.co
 """
-from random import choice, randint
-from .speak.speak import speak
+from random import choice, randint, random
+from .speak import speak
 import asyncio
 
 
@@ -51,10 +51,10 @@ class MessageBot:
                 ):
                     valid_messages.append(message)
 
-            if valid_messages and randint(0, 2) == 0: # There is a 2/3 chance that nothing will be said each time.
+            if valid_messages and "chance" in message and float(message["chance"]) > random():
                 message = choice(valid_messages)
                 message["last"] = minutes
                 speak(_get_speech(message))
 
-            await asyncio.sleep(60)
+            await asyncio.sleep(1)
             minutes += 1
