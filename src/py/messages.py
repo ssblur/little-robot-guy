@@ -3,6 +3,7 @@
     Author: Patrick Emery
     Contact: info@pemery.co
 """
+from multiprocessing import Queue
 import pyttsx3
 
 from random import choice, random
@@ -14,6 +15,7 @@ from . import config, animation
 
 _animation_state = None
 _engine = pyttsx3.init()
+_speak_queue: Queue = None
 
 def _speak(message: str):
     sleep(0.5)
@@ -46,6 +48,12 @@ class MessageBot:
     def run(self):
         seconds = 0
         while True:
+            for item in _speak_queue.get():
+                (message, animation_state) = item
+                animation.set_state(animation_state, _animation_state)
+                _speak(message)
+                animation.set_state("default", _animation_state)
+                
             valid_messages = []
             for index, message in enumerate(self.config):
                 if (
@@ -69,8 +77,9 @@ class MessageBot:
             sleep(1)
             seconds += 1
 
-def run(state):
-    global _animation_state
+def run(state, speak_queue):
+    global _animation_state, _speak_queue
+    _speak_queue = speak_queue
     _animation_state = state
     messages = MessageBot(config.main.tts)
     messages.run()

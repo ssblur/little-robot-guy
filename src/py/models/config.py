@@ -13,9 +13,16 @@ class TTSConfig:
     can_repeat: bool = True
 
 @dataclass(frozen=True)
+class TTSReward:
+    name: str
+    animation: str
+
+@dataclass(frozen=True)
 class Config:
     tts: List[TTSConfig]
     web_port: int
+    twitch_username: str
+    tts_rewards: List[TTSReward]
     viewer_enabled: bool = False
 
 def parse(config: dict) -> Config:

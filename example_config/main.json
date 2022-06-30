@@ -19,5 +19,14 @@
             ],
             "_comment": "After 60 minutes, but until 80, this will pick a random phrase from speech every 3-5 minutes, not repeating a phrase. If it runs out, it will not run again."
         }
+    ],
+    "web_port": 5581,
+    "twitch_username": "SSBlur",
+    "viewer_enabled": false,
+    "tts_rewards": [
+        {
+            "name": "TTS",
+            "animation": "talking_normal"
+        }
     ]
 }
