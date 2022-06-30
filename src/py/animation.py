@@ -1,4 +1,5 @@
 from glob import glob
+from multiprocessing import Value
 from os import getcwd, pathsep
 from socketserver import TCPServer, BaseServer
 from json import dumps
@@ -12,12 +13,22 @@ _animation_keys = list(config.animations.keys())
 _animations = dumps(config.animations, default=pydantic_encoder).encode("utf-8")
 
 class AnimationStateNotFound(Exception):
+    """An error raised when attempting to set an animation state that does not exist."""
     def __init__(self, statename, *args: object) -> None:
         super().__init__(f"State {statename} was not found.\nValid states (based on config/animations) are:\n\n" + "\n\t".join(config.animations.keys()), *args)
 
-def set_state(key: str, _animation_state):
-    if _animation_state is not None:
-        _animation_state.value = _animation_keys.index(key)
+def set_state(key: str, animation_state: Value):
+    """A helper for setting the animation state
+
+        Params:
+            key: The name of the animation state being set
+            animation_state: The value of animation_state
+    """
+    if animation_state is not None:
+        try:
+            animation_state.value = _animation_keys.index(key)
+        except ValueError:
+            raise AnimationStateNotFound(key)
 
 def get_state() -> str:
     if _animation_state is not None:
