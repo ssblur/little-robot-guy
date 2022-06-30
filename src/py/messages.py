@@ -4,57 +4,57 @@
     Contact: info@pemery.co
 """
 from random import choice, randint, random
+from typing import Dict, List, Tuple
+
+from .models.config import TTSConfig
 from .speak import speak
 import asyncio
 
 
-def _has_valid_speech(message: dict):
-    if "can_repeat" in message and message["can_repeat"] == False:
-        if "visited" in message:
-            return len(message["visited"]) < len(message["speech"])
-    return True
-
-def _get_speech(message: dict):
-    if "can_repeat" in message and message["can_repeat"] == False:
-        message["visited"] = message.get("visited") or []
-        index, speech = choice([(k, v) for k, v in enumerate(message["speech"])]) # Picks a random list entry and its index.
-        while index in message["visited"]: # Keep picking until we find something which hasn't been picked before.
-            index, speech = choice([(k, v) for k, v in enumerate(message["speech"])])
-        message["visited"].append(index)
-        return speech
-    return choice(message["speech"])
-
 class MessageBot:
-    def __init__(self, config: dict):
-        config = list(config)
-        for message in config:
-            if "speech" in message and type(message["speech"]) is str:
-                message["speech"] = [message["speech"]]
+    _last: Dict[int, float] = {}
+    _visit: Dict[int, List[int]] = {}
+
+    def __init__(self, config: List[TTSConfig]):
         self.config = config
 
-    async def run(self):
-        config = self.config
+    def _has_valid_speech(self, index: int, message: TTSConfig):
+        if message.can_repeat == False:
+            if self._visit[message]:
+                return len(self._visit[message]) < len(message.speech)
+        return True
 
+    def _get_speech(self, message_index: int, message: TTSConfig):
+        if message.can_repeat == False:
+            self._visit[message_index] = self._visit.get(index) or []
+            index, speech = choice([(k, v) for k, v in enumerate(message.speech)]) # Picks a random list entry and its index.
+            while index in self._visit[message_index]: # Keep picking until we find something which hasn't been picked before.
+                index, speech = choice([(k, v) for k, v in enumerate(message.speech)])
+            self._visit[message_index].append(index)
+            return speech
+        return choice(message.speech)
+
+    async def run(self):
         minutes = 0
         while True:
             valid_messages = []
-            for message in config:
+            for index, message in enumerate(self.config):
                 if (
-                    ("after" not in message or message["after"] <= minutes) and
-                    ("before" not in message or message["before"] >= minutes) and
+                    ((not message.after) or message.after <= minutes) and
+                    ((not message.before) or message.before >= minutes) and
                     (
-                        "minimum_gap" not in message or 
-                        "last" not in message or
-                        (minutes - message["last"]) > message["minimum_gap"]
+                        (not message.minimum_gap) or 
+                        (index not in self._last) or
+                        (minutes - self._last[index]) > message.minimum_gap
                     ) and
-                    _has_valid_speech(message)
+                    self._has_valid_speech(index, message)
                 ):
-                    valid_messages.append(message)
+                    valid_messages.append((index, message))
 
-            if valid_messages and "chance" in message and float(message["chance"]) > random():
-                message = choice(valid_messages)
-                message["last"] = minutes
-                speak(_get_speech(message))
+            if valid_messages and message.chance > random():
+                index, message = choice(valid_messages)
+                self._last[index] = minutes
+                speak(self._get_speech(index, message))
 
             await asyncio.sleep(1)
             minutes += 1

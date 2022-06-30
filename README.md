@@ -6,3 +6,7 @@ You can generate tokens with the necessary permissions for current and planned m
 
 ## Configuration
 Check example_config and .env.example, more details will be added here later.
+
+# TODO 
+
+* TTS

@@ -1,0 +1,118 @@
+{
+    "default": {
+        "frames": [
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/neutral.png",
+                    "eyes/neutral_lit.png"
+                ],
+                "frame_duration": 11
+            },
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/neutral.png",
+                    "eyes/empty_lit.png"
+                ],
+                "frame_duration": 0.1
+            }
+        ]
+    },
+    "talking_normal": {
+        "frames": [
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/agape.png", 
+                    "eyes/neutral_lit.png"
+                ],
+                "frame_duration": 0.66
+            },
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/closed.png", 
+                    "eyes/neutral_lit.png"
+                ],
+                "frame_duration": 0.66
+            }
+        ]
+    },
+    "talking_embarassed": {
+        "frames": [
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/agape.png", 
+                    "eyes/shifty_right_lit.png",
+                    "extras/blush.png"
+                ],
+                "frame_duration": 0.66
+            },
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/closed.png", 
+                    "eyes/shifty_right_lit.png",
+                    "extras/blush.png"
+                ],
+                "frame_duration": 0.66
+            },
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/agape.png", 
+                    "eyes/shifty_right_lit.png",
+                    "extras/blush.png"
+                ],
+                "frame_duration": 0.66
+            },
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/closed.png", 
+                    "eyes/shifty_right_lit.png",
+                    "extras/blush.png"
+                ],
+                "frame_duration": 0.66
+            },
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/agape.png", 
+                    "eyes/shifty_left_lit.png",
+                    "extras/blush.png"
+                ],
+                "frame_duration": 0.66
+            },
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/closed.png", 
+                    "eyes/shifty_left_lit.png",
+                    "extras/blush.png"
+                ],
+                "frame_duration": 0.66
+            },
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/agape.png", 
+                    "eyes/shifty_left_lit.png",
+                    "extras/blush.png"
+                ],
+                "frame_duration": 0.66
+            },
+            {
+                "layers": [
+                    "base/neutral.png",
+                    "mouth/closed.png", 
+                    "eyes/shifty_left_lit.png",
+                    "extras/blush.png"
+                ],
+                "frame_duration": 0.66
+            }
+        ]
+    }
+}
