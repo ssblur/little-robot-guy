@@ -6,6 +6,7 @@
 	let layers = [];
 	let activeFrames = []
 
+	// Animations are fetched at start, with the concession that the page needs to be reloaded if the script is restarted.
 	fetch("/animations", {method: "POST"})
 		.then(response => response.json())
 		.then(response => {
@@ -23,6 +24,8 @@
 					}
 		});
 
+	// Rather than streaming animation data, the same HTTP server is just used to sync animation state.
+	// This is updated 20 times per second.
 	setInterval(
 		() => {
 			fetch("/status", {method: "POST"})
@@ -40,6 +43,10 @@
 		50
 	);
 
+	/**
+	 * Advances the current animation to the next frame.
+	 * Queues a frame advance to occur after this frame's duration is up.
+	 */
 	function advanceFrame() {
 		frame++;
 		frame = frame % getAnimation().frames.length;
@@ -47,14 +54,23 @@
 		animationTimeout = setTimeout(advanceFrame, getFrameLength())
 	}
 
+	/**
+	 * Helper function for getting the current frame's intended duration.
+	 */
 	function getFrameLength() {
 		return (getFrame()?.frame_duration || getAnimation()?.frame_duration || 1) * 1000;
 	}
 
+	/**
+	 * Helper function for getting information on the current animation state.
+	 */
 	function getAnimation() {
 		return animations && animations[status];
 	}
 
+	/**
+	 * Helper function for getting information on the current frame.
+	 */
 	function getFrame() {
 		return getAnimation()?.frames[frame] || null;
 	}
