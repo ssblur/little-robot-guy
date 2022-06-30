@@ -10,9 +10,11 @@ from asyncio.windows_utils import Popen
 from multiprocessing import Process, Queue, Value
 from src.py import animation, messages, viewer, config, twitch_client
 
-animation_state = Value("i", 0)
-speak_queue = Queue()
+
 def main():
+    animation_state = Value("i", 0)
+    speak_queue = Queue()
+
     processes = []
     messages_process = Process(target=messages.run, args=(animation_state, speak_queue))
     messages_process.start()
@@ -32,8 +34,11 @@ def main():
         processes.append(viewer_process)
 
     print("All components have been started")
+    print("Press enter to terminate.")
+    input()
+    print('Terminating...')
     for process in processes:
-        process.join()
+        process.terminate()
 
 if __name__ == "__main__":
     main()
