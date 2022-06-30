@@ -15,6 +15,7 @@ class TTSConfig:
 @dataclass(frozen=True)
 class Config:
     tts: List[TTSConfig]
+    web_port: int
 
 def parse(config: dict) -> Config:
     """Generates a Config from a dict

@@ -3,13 +3,15 @@
     Author: Patrick Emery
     Contact: info@pemery.co
 """
-from random import choice, randint, random
-from typing import Dict, List, Tuple
+from random import choice, random
+from time import sleep
+from typing import Dict, List
 
 from .models.config import TTSConfig
 from .speak import speak
-import asyncio
+from . import config, animation
 
+_animation_state = None
 
 class MessageBot:
     _last: Dict[int, float] = {}
@@ -34,18 +36,18 @@ class MessageBot:
             return speech
         return choice(message.speech)
 
-    async def run(self):
-        minutes = 0
+    def run(self):
+        seconds = 0
         while True:
             valid_messages = []
             for index, message in enumerate(self.config):
                 if (
-                    ((not message.after) or message.after <= minutes) and
-                    ((not message.before) or message.before >= minutes) and
+                    ((not message.after) or message.after <= seconds) and
+                    ((not message.before) or message.before >= seconds) and
                     (
                         (not message.minimum_gap) or 
                         (index not in self._last) or
-                        (minutes - self._last[index]) > message.minimum_gap
+                        (seconds - self._last[index]) > message.minimum_gap
                     ) and
                     self._has_valid_speech(index, message)
                 ):
@@ -53,8 +55,16 @@ class MessageBot:
 
             if valid_messages and message.chance > random():
                 index, message = choice(valid_messages)
-                self._last[index] = minutes
+                self._last[index] = seconds
+                animation.set_state("talking_normal", _animation_state)
+                sleep(1)
                 speak(self._get_speech(index, message))
+                animation.set_state("default", _animation_state)
+            sleep(1)
+            seconds += 1
 
-            await asyncio.sleep(1)
-            minutes += 1
+def run(state):
+    global _animation_state
+    _animation_state = state
+    messages = MessageBot(config.main.tts)
+    messages.run()

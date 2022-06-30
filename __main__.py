@@ -4,21 +4,24 @@
     Author: Patrick Emery
     Contact: info@pemery.co
 """
-import asyncio
-from src.py.messages import MessageBot
-from src.py import config
+from asyncio.windows_utils import Popen
+from multiprocessing import Process, Value
+from src.py import animation, messages
 
-async def run():
-    tasks = []
-    messages = MessageBot(config.main.tts)
-    tasks.append(messages.run())
-
-    print("All valid components have been started")
-
-    await asyncio.gather(*tasks)
-
+animation_state = Value("i", 0)
 def main():
-    asyncio.run(run())
+    processes = []
+    messages_process = Process(target=messages.run, args=(animation_state,))
+    messages_process.start()
+    processes.append(messages_process)
+
+    animation_process = Process(target=animation.run, args=(animation_state,))
+    animation_process.start()
+    processes.append(animation_process)
+
+    print("All components have been started")
+    for process in processes:
+        process.join()
 
 if __name__ == "__main__":
     main()

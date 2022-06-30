@@ -1,5 +1,6 @@
 from enum import Enum
 from threading import Lock
+from . import animation
 import asyncio
 import pyttsx3
 import tempfile

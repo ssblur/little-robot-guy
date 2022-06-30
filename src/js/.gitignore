@@ -1,4 +1,4 @@
 /node_modules/
 /public/build/
-
+/public/layers/
 .DS_Store

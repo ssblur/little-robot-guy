@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 from pydantic.dataclasses import dataclass
 
 @dataclass(frozen=True)
@@ -24,9 +24,13 @@ class Frame:
 class AnimationState:
     frames: List[Frame]
     transform: Optional[TransformSettings] = None
+    frame_duration: float = 1
 
-def parse(config: dict) -> List[AnimationState]:
+def parse(config: dict) -> dict[str, AnimationState]:
     """Generates an AnimationState from a dict
+
+        Params: 
+            config - A parsed configuration object or dict to convert
 
         Returns:
             A list of AnimationStates corresponding with config information
@@ -34,3 +38,4 @@ def parse(config: dict) -> List[AnimationState]:
     results = {}
     for k, v in config.items():
         results[k] = AnimationState(**v)
+    return results
