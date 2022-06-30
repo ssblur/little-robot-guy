@@ -63,7 +63,7 @@ class MessageBot:
             if valid_messages and message.chance > random():
                 index, message = choice(valid_messages)
                 self._last[index] = seconds
-                animation.set_state("talking_normal", _animation_state)
+                animation.set_state("talking_embarassed", _animation_state)
                 _speak(self._get_speech(index, message))
                 animation.set_state("default", _animation_state)
             sleep(1)

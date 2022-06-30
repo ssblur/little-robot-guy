@@ -16,6 +16,7 @@ class TTSConfig:
 class Config:
     tts: List[TTSConfig]
     web_port: int
+    viewer_enabled: bool = False
 
 def parse(config: dict) -> Config:
     """Generates a Config from a dict

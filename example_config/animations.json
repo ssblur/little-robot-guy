@@ -27,7 +27,7 @@
                     "mouth/agape.png", 
                     "eyes/neutral_lit.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             },
             {
                 "layers": [
@@ -35,7 +35,7 @@
                     "mouth/closed.png", 
                     "eyes/neutral_lit.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             }
         ]
     },
@@ -48,7 +48,7 @@
                     "eyes/shifty_right_lit.png",
                     "extras/blush.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             },
             {
                 "layers": [
@@ -57,7 +57,7 @@
                     "eyes/shifty_right_lit.png",
                     "extras/blush.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             },
             {
                 "layers": [
@@ -66,7 +66,7 @@
                     "eyes/shifty_right_lit.png",
                     "extras/blush.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             },
             {
                 "layers": [
@@ -75,7 +75,7 @@
                     "eyes/shifty_right_lit.png",
                     "extras/blush.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             },
             {
                 "layers": [
@@ -84,7 +84,7 @@
                     "eyes/shifty_left_lit.png",
                     "extras/blush.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             },
             {
                 "layers": [
@@ -93,7 +93,7 @@
                     "eyes/shifty_left_lit.png",
                     "extras/blush.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             },
             {
                 "layers": [
@@ -102,7 +102,7 @@
                     "eyes/shifty_left_lit.png",
                     "extras/blush.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             },
             {
                 "layers": [
@@ -111,7 +111,7 @@
                     "eyes/shifty_left_lit.png",
                     "extras/blush.png"
                 ],
-                "frame_duration": 0.66
+                "frame_duration": 0.5
             }
         ]
     }

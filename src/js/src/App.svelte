@@ -3,25 +3,12 @@
 	let animations = null;
 	let animationTimeout = null;
 	let frame = 0;
-	let layers = [];
-	let activeFrames = []
 
 	// Animations are fetched at start, with the concession that the page needs to be reloaded if the script is restarted.
 	fetch("/animations", {method: "POST"})
 		.then(response => response.json())
 		.then(response => {
 			animations = response;
-			for(let animation of Object.values(animations))
-				for(let frame of animation.frames)
-					for(let layer of frame.layers) {
-						let path;
-						if(typeof layer === 'string' || layer instanceof String)
-							path = layer;
-						else
-							path = layer.path;
-						if(!(path in layers))
-							layers.push(path);
-					}
 		});
 
 	// Rather than streaming animation data, the same HTTP server is just used to sync animation state.
@@ -50,7 +37,6 @@
 	function advanceFrame() {
 		frame++;
 		frame = frame % getAnimation().frames.length;
-		activeFrames = getFrame().layers;
 		animationTimeout = setTimeout(advanceFrame, getFrameLength())
 	}
 
@@ -85,26 +71,35 @@
 		max-height: 100%;
 	}
 
-	img.inactive {
+	.inactive {
 		display: none;
+	}
+
+	.active { 
+		display: block;
 	}
 </style>
 
-{#each layers as layer}
-	<img 
-		src="layers/{layer}" 
-		class="inactive" 
-		alt="Animation placeholder {layer} for chat bot" />
-{/each}
-
 <div>
-	{#if animations != null && status != null}
-		{#each activeFrames as layer}
-			<img 
-				src="layers/{layer}" 
-				alt="Animation layer {layer} for chat bot {frame}" />
+	{#if animations}
+		{#each Object.entries(animations) as [key, animation]}
+			<div class="{status == key ? 'active' : 'inactive'}">
+				{#each Object.entries(animation.frames) as [index, framedata]}
+					<div class="{frame == index ? 'active' : 'inactive'}">
+						{#each framedata.layers as layer}
+							{#if typeof layer == "string" || layer instanceof String}
+								<img 
+									src="layers/{layer}" 
+									alt="Animation {key} frame {index} layer {layer}" />
+							{:else}
+								<img 
+									src="layers/{layer.path}" 
+									alt="Animation {key} frame {index} layer {layer.path}" />
+							{/if}
+						{/each}
+					</div>
+				{/each}
+			</div>
 		{/each}
-	{:else}
-		Loading...
 	{/if}
 </div>
