@@ -16,6 +16,7 @@ _animation_state = None
 _engine = pyttsx3.init()
 
 def _speak(message: str):
+    sleep(0.5)
     _engine.say(message)
     _engine.runAndWait()
 
@@ -63,7 +64,6 @@ class MessageBot:
                 index, message = choice(valid_messages)
                 self._last[index] = seconds
                 animation.set_state("talking_normal", _animation_state)
-                sleep(1)
                 _speak(self._get_speech(index, message))
                 animation.set_state("default", _animation_state)
             sleep(1)
