@@ -7,8 +7,6 @@ class ConfigException(Exception):
     def __init__(self, name,  *args: object) -> None:
         super().__init__(f"Please set up {name}. Example is provided in ./example_config/{name}", *args)
 
-# Configs are read only, so a mutex shouldn't be necessary.
-
 main: config.Config
 try:
     with open("config/main.json", "r") as f:
