@@ -3,15 +3,21 @@
     Author: Patrick Emery
     Contact: info@pemery.co
 """
+import pyttsx3
+
 from random import choice, random
 from time import sleep
 from typing import Dict, List
 
 from .models.config import TTSConfig
-from .speak import speak
 from . import config, animation
 
 _animation_state = None
+_engine = pyttsx3.init()
+
+def _speak(message: str):
+    _engine.say(message)
+    _engine.runAndWait()
 
 class MessageBot:
     _last: Dict[int, float] = {}
@@ -58,7 +64,7 @@ class MessageBot:
                 self._last[index] = seconds
                 animation.set_state("talking_normal", _animation_state)
                 sleep(1)
-                speak(self._get_speech(index, message))
+                _speak(self._get_speech(index, message))
                 animation.set_state("default", _animation_state)
             sleep(1)
             seconds += 1
