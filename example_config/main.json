@@ -28,5 +28,18 @@
             "name": "TTS",
             "animation": "talking_normal"
         }
-    ]
+    ],
+    "streamathon_settings": {
+        "enabled": true,
+        "message_animation": "talking_normal",
+        "start_time": 3600,
+        "time": {
+            "follow": [60, 120, 180],
+            "bits": [1, 2],
+            "subscription": [300, 360, 420, 480],
+            "rewards": {
+                "Add 5 minutes": [300]
+            }
+        }
+    }
 }

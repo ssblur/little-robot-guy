@@ -4,6 +4,7 @@
     Contact: info@pemery.co
 """
 from multiprocessing import Queue
+from queue import Empty
 import pyttsx3
 
 from random import choice, random
@@ -30,14 +31,15 @@ class MessageBot:
         self.config = config
 
     def _has_valid_speech(self, index: int, message: TTSConfig):
+        self._visit[index] = self._visit.get(index) or []
         if message.can_repeat == False:
-            if self._visit[message]:
-                return len(self._visit[message]) < len(message.speech)
+            if self._visit[index]:
+                return len(self._visit[index]) < len(message.speech)
         return True
 
     def _get_speech(self, message_index: int, message: TTSConfig):
         if message.can_repeat == False:
-            self._visit[message_index] = self._visit.get(index) or []
+            self._visit[message_index] = self._visit.get(message_index) or []
             index, speech = choice([(k, v) for k, v in enumerate(message.speech)]) # Picks a random list entry and its index.
             while index in self._visit[message_index]: # Keep picking until we find something which hasn't been picked before.
                 index, speech = choice([(k, v) for k, v in enumerate(message.speech)])
@@ -48,11 +50,17 @@ class MessageBot:
     def run(self):
         seconds = 0
         while True:
-            for item in _speak_queue.get():
-                (message, animation_state) = item
-                animation.set_state(animation_state, _animation_state)
-                _speak(message)
-                animation.set_state("default", _animation_state)
+            while True:
+                try:
+                    datum = _speak_queue.get(False)
+                    if datum is None: 
+                        break
+                    (message, animation_state) = datum
+                    animation.set_state(animation_state, _animation_state)
+                    _speak(message)
+                    animation.set_state("default", _animation_state)
+                except Empty:
+                    break
                 
             valid_messages = []
             for index, message in enumerate(self.config):
@@ -71,7 +79,7 @@ class MessageBot:
             if valid_messages and message.chance > random():
                 index, message = choice(valid_messages)
                 self._last[index] = seconds
-                animation.set_state("talking_embarassed", _animation_state)
+                animation.set_state(message.animation, _animation_state)
                 _speak(self._get_speech(index, message))
                 animation.set_state("default", _animation_state)
             sleep(1)

@@ -2,7 +2,10 @@
 	let status = null;
 	let animations = null;
 	let animationTimeout = null;
+	let hasEverHadTime = false;
 	let frame = 0;
+	let time = 0;
+	let latest = 0;
 
 	// Animations are fetched at start, with the concession that the page needs to be reloaded if the script is restarted.
 	fetch("/animations", {method: "POST"})
@@ -28,6 +31,23 @@
 				});
 		},
 		50
+	);
+
+	setInterval(
+		() => {
+			if(time > 0) time--;
+			fetch("/time", {method: "POST"})
+				.then(response => response.json())
+				.then(response => {
+					response = response.filter(item => item[0] > latest);
+					for(let item of response) {
+						latest = Math.max(latest, item[0]);
+						time += item[1]
+					}
+					if(time > 0) hasEverHadTime = true;
+				});
+		},
+		1000
 	);
 
 	/**
@@ -60,6 +80,12 @@
 	function getFrame() {
 		return getAnimation()?.frames[frame] || null;
 	}
+
+	function formatTime(seconds) {
+		let date = new Date(0)
+		date.setSeconds(seconds)
+		return date.toISOString().substring(11, 19)
+	}
 </script>
 
 <style>
@@ -77,6 +103,26 @@
 
 	.active { 
 		display: block;
+	}
+
+	.time {
+		position: fixed;
+		right: 20px;
+		top: 20px;
+		font-size: 10vw;
+		z-index: 100;
+		font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+		color: white;
+		background-color: #000;
+		text-align: center;
+		padding-top: 0;
+		margin-top: 0;
+	}
+
+	.timelabel {
+		font-size: 4vw;
+		padding: 0;
+		margin: 0;
 	}
 </style>
 
@@ -101,5 +147,11 @@
 				{/each}
 			</div>
 		{/each}
+	{/if}
+	{#if hasEverHadTime}
+		<div class="time">
+			<p class="timelabel">Time Remaining</p>
+			{formatTime(time)}
+		</div>
 	{/if}
 </div>

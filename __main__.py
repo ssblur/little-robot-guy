@@ -1,6 +1,6 @@
 """
-    A terrible advertiser helper.
-    Built as fast as possible to run on as many modern systems as possible with no pipfile, manual setup, or hard dependencies.
+    A terrible general-purpose stream assistant.
+    Built as fast as possible to run decently between other projects.
     Author: Patrick Emery
     Contact: info@pemery.co
 """
@@ -14,17 +14,18 @@ from src.py import animation, messages, viewer, config, twitch_client
 def main():
     animation_state = Value("i", 0)
     speak_queue = Queue()
+    time_queue = Queue()
 
     processes = []
     messages_process = Process(target=messages.run, args=(animation_state, speak_queue))
     messages_process.start()
     processes.append(messages_process)
 
-    animation_process = Process(target=animation.run, args=(animation_state,))
+    animation_process = Process(target=animation.run, args=(animation_state, time_queue))
     animation_process.start()
     processes.append(animation_process)
 
-    twitch_process = Process(target=twitch_client.run, args=(speak_queue,))
+    twitch_process = Process(target=twitch_client.run, args=(speak_queue, time_queue))
     twitch_process.start()
     processes.append(twitch_process)
 
